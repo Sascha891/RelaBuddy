@@ -1,0 +1,7 @@
+# Geheimen
+.env
+
+# Grote/lokale mappen
+faiss_index/
+__pycache__/
+venv/
