@@ -27,6 +27,19 @@ class Backend:
         if not api_key:
             raise ValueError("API-sleutel niet gevonden in .env")
 
+        # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
+        if not os.path.exists("faiss_index"):
+            print("FAISS index niet gevonden, bezig met bouwen...")
+            # De logica van build_vectorstore.py hierin verwerkt
+            from langchain_text_splitters import CharacterTextSplitter
+            with open("kennisbank.txt", "r", encoding="utf-8") as f:
+                text = f.read()
+            text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
+            docs = text_splitter.create_documents([text])
+            vector_store = FAISS.from_documents(docs, embeddings)
+            vector_store.save_local("faiss_index")
+            print("FAISS index gebouwd en opgeslagen.")
+
         # Laad de FAISS index en initialiseer retriever
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
         vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
@@ -78,4 +91,5 @@ class Backend:
 class MockBackend:
     def get_response(self, user_input: str) -> str:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
+
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
