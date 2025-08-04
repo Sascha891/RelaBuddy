@@ -39,7 +39,7 @@ class Backend:
             docs = text_splitter.create_documents([text])
             # --- DEBUGGING STAP: Controleer of er documenten zijn gemaakt ---
             if not docs:
-            raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
+                raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
             
             vector_store = FAISS.from_documents(docs, embeddings)
             vector_store.save_local("faiss_index")
@@ -98,5 +98,6 @@ class MockBackend:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
 
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
+
 
 
