@@ -32,19 +32,27 @@ class Backend:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
 
         # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
-        if not os.path.exists("faiss_index"):
-            print("FAISS index niet gevonden, bezig met bouwen...")
-            from langchain_text_splitters import CharacterTextSplitter
+      # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
+            if not os.path.exists("faiss_index"):
+                print("FAISS index niet gevonden, bezig met bouwen...")
+                from langchain_text_splitters import CharacterTextSplitter
+                
+                script_dir = os.path.dirname(os.path.abspath(__file__))
+                file_path = os.path.join(script_dir, "AEDP_KB.txt")
+    
+                # --- DEZE REGEL IS AANGEPAST MET 'errors="ignore"' ---
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+    
+                text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
+                docs = text_splitter.create_documents([text])
             
-            # Gebruik de robuuste manier om het bestandspad te vinden
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path = os.path.join(script_dir, "AEDP_KB.txt")
-
-            with open(file_path, "r", encoding="utf-8") as f:
-                text = f.read()
-
-            text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
-            docs = text_splitter.create_documents([text])
+            if not docs:
+                raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
+            
+            vector_store = FAISS.from_documents(docs, embeddings)
+            vector_store.save_local("faiss_index")
+            print("FAISS index gebouwd en opgeslagen.")
             
             if not docs:
                 raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
@@ -106,6 +114,7 @@ class MockBackend:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
 
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
+
 
 
 
