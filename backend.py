@@ -32,7 +32,7 @@ class Backend:
             print("FAISS index niet gevonden, bezig met bouwen...")
             # De logica van build_vectorstore.py hierin verwerkt
             from langchain_text_splitters import CharacterTextSplitter
-            with open("kennisbank.txt", "r", encoding="utf-8") as f:
+            with open("AEDP_KB.txt", "r", encoding="utf-8") as f:
                 text = f.read()
             text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
             docs = text_splitter.create_documents([text])
@@ -93,3 +93,4 @@ class MockBackend:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
 
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
+
