@@ -28,25 +28,33 @@ class Backend:
         if not api_key:
             raise ValueError("API-sleutel niet gevonden in .env")
 
+        # --- OPLOSSING: Initialiseer embeddings HIER, vóórdat het wordt gebruikt ---
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
+
         # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
         if not os.path.exists("faiss_index"):
             print("FAISS index niet gevonden, bezig met bouwen...")
-            # De logica van build_vectorstore.py hierin verwerkt
             from langchain_text_splitters import CharacterTextSplitter
-            with open("AEDP_KB.txt", "r", encoding="utf-8") as f:
+            
+            # Gebruik de robuuste manier om het bestandspad te vinden
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(script_dir, "AEDP_KB.txt")
+
+            with open(file_path, "r", encoding="utf-8") as f:
                 text = f.read()
+
             text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
             docs = text_splitter.create_documents([text])
-            # --- DEBUGGING STAP: Controleer of er documenten zijn gemaakt ---
+            
             if not docs:
                 raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
             
+            # Nu kan de 'embeddings' variabele hier veilig worden gebruikt
             vector_store = FAISS.from_documents(docs, embeddings)
             vector_store.save_local("faiss_index")
             print("FAISS index gebouwd en opgeslagen.")
 
         # Laad de FAISS index en initialiseer retriever
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
         vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
         self.retriever = vector_store.as_retriever(search_kwargs={"k": 1})
         
@@ -98,6 +106,7 @@ class MockBackend:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
 
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
+
 
 
 
