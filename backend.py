@@ -1,6 +1,3 @@
-# backend.py
-
-
 import asyncio
 import os
 from dotenv import load_dotenv
@@ -28,36 +25,28 @@ class Backend:
         if not api_key:
             raise ValueError("API-sleutel niet gevonden in .env")
 
-        # --- OPLOSSING: Initialiseer embeddings HIER, vóórdat het wordt gebruikt ---
+        # Initialiseer embeddings vóórdat het wordt gebruikt
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
 
+        # --- DIT BLOK HEEFT NU DE CORRECTE INSPRINGING ---
         # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
-      # CHECK OF INDEX BESTAAT, ANDERS BOUWEN
-            if not os.path.exists("faiss_index"):
-                print("FAISS index niet gevonden, bezig met bouwen...")
-                from langchain_text_splitters import CharacterTextSplitter
-                
-                script_dir = os.path.dirname(os.path.abspath(__file__))
-                file_path = os.path.join(script_dir, "AEDP_KB.txt")
-    
-                # --- DEZE REGEL IS AANGEPAST MET 'errors="ignore"' ---
-                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                    text = f.read()
-    
-                text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
-                docs = text_splitter.create_documents([text])
+        if not os.path.exists("faiss_index"):
+            print("FAISS index niet gevonden, bezig met bouwen...")
+            from langchain_text_splitters import CharacterTextSplitter
+            
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(script_dir, "AEDP_KB.txt")
+            
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read()
+            
+            text_splitter = CharacterTextSplitter(separator="---", chunk_size=1000, chunk_overlap=200)
+            docs = text_splitter.create_documents([text])
             
             if not docs:
                 raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
             
-            vector_store = FAISS.from_documents(docs, embeddings)
-            vector_store.save_local("faiss_index")
-            print("FAISS index gebouwd en opgeslagen.")
-            
-            if not docs:
-                raise ValueError("De text_splitter heeft geen documenten kunnen maken. Controleer of 'AEDP_KB.txt' niet leeg is en het '---' scheidingsteken bevat.")
-            
-            # Nu kan de 'embeddings' variabele hier veilig worden gebruikt
+            # --- HET BOUWEN VAN DE INDEX STAAT ER NU MAAR ÉÉN KEER ---
             vector_store = FAISS.from_documents(docs, embeddings)
             vector_store.save_local("faiss_index")
             print("FAISS index gebouwd en opgeslagen.")
@@ -102,7 +91,7 @@ class Backend:
 
         final_prompt = [
             SystemMessage(content=system_prompt_persona),
-            HumanMessage(content=user_input), # We gebruiken de originele input van de gebruiker
+            HumanMessage(content=user_input),
             SystemMessage(content=final_prompt_instruction)
         ]
         response = self.model.invoke(final_prompt)
@@ -112,10 +101,4 @@ class Backend:
 class MockBackend:
     def get_response(self, user_input: str) -> str:
         """Simuleert een antwoord van de AI zonder API-aanroep."""
-
         return f"Je zei: '{user_input}'. Dit is een test-antwoord van de Mock Backend."
-
-
-
-
-
