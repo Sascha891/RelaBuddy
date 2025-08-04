@@ -1,0 +1,19 @@
+Analyse en Toepassing van het AEDP-model voor een Therapeutische AI-Chatbot
+
+Algemene Bruikbaarheid voor Chatbot-ontwikkeling
+
+De beschrijving van de vier staten van het Accelerated Experiential Dynamic Psychotherapy (AEDP) model, zoals toegepast op koppels, vormt de kern van de chatbot-logica. Dit raamwerk biedt niet alleen inzicht in de therapeutische stappen, maar ook in het 'waarom' en 'hoe' van de interacties die de chatbot moet sturen. Het model is essentieel voor de rol van de "Relationship Buddy" en biedt een gedetailleerd, psychologisch onderbouwd stappenplan om de relatiedynamiek te navigeren. Het voorziet de AI van een 'diagnostisch' kader om de toestand van de partners te herkennen en een 'behandelplan' om hen van de ene staat naar de volgende te begeleiden. Concepten als 'moment-tot-moment tracking', 'ik-boodschappen', 'metaprocessing' en 'transformance-strevingen' bieden concrete, operationele instructies voor de programmeerlogica.
+---
+Staat 1: Stress, Nood & Symptomen
+
+Kenmerken van Staat 1
+
+Staat 1 is de beginfase waarin partners zich vaak bevinden bij aanvang van therapie. Deze staat wordt gekenmerkt door stress, leed, en symptomen die voortkomen uit onbewuste afweermechanismen. Partners ervaren gevoelens van onveiligheid, eenzaamheid en het gevoel vast te zitten in een cyclus van escalerende conflicten. De communicatie wordt belemmerd door remmende emoties zoals angst, schaamte en schuld, wat direct contact met de kern van emotionele ervaringen blokkeert.
+
+Herkenning van Signalen (Diagnostiek en Afstemming)
+
+De chatbot moet getraind worden om de fysieke, verbale en gedragsmatige signalen van Staat 1 te herkennen. Een signaal is verdedigende taal en communicatiepatronen. Dit omvat Aanval en Beschuldiging ("You-statements"), Tegenattackeren, Rechtvaardige Verontwaardiging, Ontkenning of Minimalisering, Intellectualisering en Abstracte Taal, Vage Taal, Defensieve Humor en Sarcasme, en Excuses en Rechtvaardiging. Specifieke afweerreacties zijn ook een kenmerk. Een voorbeeld is de Fawn-reactie (People-Pleasing) of Gaslighting. Gedragsmatige en fysieke manifestaties uiten zich in Terugtrekking en Vermijding, Lichamelijke Spanning, Lage Energie, en een stijve, afwerende Lichaamshouding.
+---
+De Therapeutische Aanpak van de Chatbot in Staat 1
+
+Het primaire doel in Staat 1 is het co-creëren van veiligheid en het doorbreken van de defensieve cyclus. De therapeut (en dus de chatbot) neemt de rol aan van een "sterkere en/of wijze ander" om een veilige basis te vormen. Voor het creëren van veiligheid en afstemming moet de chatbot reguleren en vertragen, valideren en normaliseren, Moment-tot-Moment Tracking toepassen en de nadruk leggen op "Wij-zijn-hier-samen". Om de communicatie te transformeren, stimuleert de chatbot "Ik-boodschappen", confronteert verdedigingen zacht, en focust op gewenste uitkomsten. Voor het aanpakken van kwetsbaarheid en de angst voor oordeel wordt de hulpvraag herkaderd als een teken van moed en wordt de chat gepresenteerd als een digitale veilige haven. Ten slotte zoekt de chatbot naar "Glimmers of Hope" door signalen van veerkracht en hoop te benoemen om de focus te verleggen en de weg naar Staat 2 te openen.
